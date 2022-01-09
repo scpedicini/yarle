@@ -1,3 +1,4 @@
+/* tslint:disable:no-console */
 import { JSDOM } from 'jsdom';
 
 import { getTurndownService } from './utils/turndown-service';
@@ -5,13 +6,38 @@ import { NoteData } from './models/NoteData';
 import { YarleOptions } from './YarleOptions';
 import { OutputFormat } from './output-format';
 
+const unwrapElement = (node: Element) => { node.replaceWith(...Array.from(node.children)); };
+
 const fixSublists = (node: HTMLElement) => {
-    const ulElements: Array<HTMLElement> = Array.from(node.getElementsByTagName('ul'));
+  const { document } = (new JSDOM(`...`)).window;
+
+
+  const ulElements: Array<HTMLElement> = Array.from(node.getElementsByTagName('ul'));
     const olElements: Array<HTMLElement> = Array.from(node.getElementsByTagName('ol'));
+
+    // fix for ul tags that are surrounded by div containers which causes MD nesting to fail
+    // ulElements = Array.from(node.getElementsByTagName('ul'));
+    for (const ulNode of ulElements) {
+      const parentNodeDiv = ulNode.parentElement;
+      if (parentNodeDiv && parentNodeDiv.tagName === 'DIV') {
+        unwrapElement(parentNodeDiv);
+      }
+    }
+
     const listElements = ulElements.concat(olElements);
     listElements.forEach(listNode => {
       if (listNode.parentElement.tagName === 'LI') {
+        let $li = listNode.parentElement;
+        // @ts-ignore
+        let liText = [...$li.childNodes].filter(x => x.nodeName === '#text' && x.textContent.trim().length > 0).map(x => x.textContent).join().trim()
+
         listNode.parentElement.replaceWith(listNode);
+
+        if(liText.length > 0) {
+          let $div = document.createElement('div') as HTMLElement;
+          $div.innerHTML = liText;
+          listNode.parentElement.prepend($div);
+        }
       }
       if (
         listNode.previousElementSibling &&

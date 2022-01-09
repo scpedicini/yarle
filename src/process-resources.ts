@@ -22,9 +22,9 @@ export const processResources = (note: any): string => {
     let updatedContent = cloneDeep(note.content);
     const {absoluteResourceWorkDir, relativeResourceWorkDir} = getResourceWorkDirs(note);
 
-    utils.loggerInfo(`relative resource work dir: ${relativeResourceWorkDir}`);
-
-    utils.loggerInfo(`absolute resource work dir: ${absoluteResourceWorkDir}`);
+    // utils.loggerInfo(`relative resource work dir: ${relativeResourceWorkDir}`);
+    //
+    // utils.loggerInfo(`absolute resource work dir: ${absoluteResourceWorkDir}`);
 
     utils.clearResourceDir(note);
     if (Array.isArray(note.resource)) {
@@ -46,8 +46,9 @@ export const processResources = (note: any): string => {
     return updatedContent;
   };
 
+// after processing the resources array, use the hash to match up and replace the "en-media" tags.
 const addMediaReference = (content: string, resourceHashes: any, hash: any, workDir: string): string => {
-  const src = `${workDir}${yarleOptions.pathSeparator}${resourceHashes[hash].fileName.replace(/ /g, '\ ')}`;
+  const src = `${!yarleOptions.rootNameOnly ? workDir + yarleOptions.pathSeparator : ''}${resourceHashes[hash].fileName.replace(/ /g, '\ ')}`;
   utils.loggerInfo(`mediaReference src ${src} added`);
   let updatedContent = cloneDeep(content);
   const replace = `<en-media ([^>]*)hash="${hash}".([^>]*)>`;

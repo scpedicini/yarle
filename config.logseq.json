@@ -14,8 +14,6 @@
     },
     "outputFormat": "StandardMD",
     "urlEncodeFileNamesAndLinks": false,
-    "sanitizeResourceNameSpaces": false, 
-    "replacementChar": "_",
     "pathSeparator": "/",
     "resourcesDir": "assets",
     "turndownOptions": {
@@ -32,11 +30,8 @@
     "monospaceIsCodeBlock": false,
     "keepOriginalAmountOfNewlines": true,
     "haveEnexLevelResources": true,
-    "haveGlobalResources": false,
+    "rootNameOnly": false,
     "logseqSettings":{
         "journalNotes": false
-    },
-    "obsidianSettings": {
-        "omitLinkDisplayName": false
     }
 }

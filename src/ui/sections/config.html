@@ -32,36 +32,29 @@
             <select name="logseqSettings.journalNotes" id="logseqSettings.journalNotes">
               <option value="true">Journal Notes</option>
               <option value="false">Pages</option>
-            </select>   
-          </div>
+             </select>
+            </div>
             <br>
             <div class="field half">
-              <input type="checkbox"  value="false" name="obsidianSettings.omitLinkDisplayName" id="obsidianSettings.omitLinkDisplayName">
-              <label for="obsidianSettings.omitLinkDisplayName" class="pure-input-1-2">Omit links' display name
-              </label>
-            </div>              
-            
-            <br>
-            <div class="field half">
-            <input type="checkbox" id='keepOriginalHtml' value="false">
+            <input type="checkbox" value="false" id='keepOriginalHtml' value="false">
                   <label for="keepOriginalHtml" class="pure-checkbox">
                     Keep the original Html
                     <br><div style='font-size: 12px;'><i>(
                     Converts the notes to HTML format also.)</i></div>
                   </label>
-              
+
             </div>
             <div class="field half">
-              
-              <input type="checkbox" value="false" id='addWebClips'> 
+
+              <input type="checkbox" value="false" id='addWebClips'>
                 <label for="addWebClips" class="pure-checkbox">
                   Convert webclips
                   <br><div style='font-size: 12px;'><i>(Convert webclips too)</i></div>
                 </label>
-            
+
             </div>
             <div class="field half">
-              <input type="checkbox" value="false" id='isZettelkastenNeeded'> 
+              <input type="checkbox" value="false" id='isZettelkastenNeeded'>
               <label for="isZettelkastenNeeded" class="pure-checkbox">
                 Zettelkasten-prefix needed.
                   <br><div style='font-size: 12px;'><i>((It puts Zettelkasten Id (based on time of creation) at the beginning of the file name.))</i></div>
@@ -69,36 +62,46 @@
             </div>
 
             <div class="field half">
-              
+
               <label for="dateFormat" >
                 Date format:
               </label>
-              <input type="text" value="" id='dateFormat'> 
+              <input type="text" value="" id='dateFormat'>
               <br><div style='font-size: 12px;'><i>(
                 ISO 8601 specification of the expected date format (e.g. YYYY-MM-DD))</i></div>
 
           </div>
 
           <div class="field half">
-            <input type="checkbox" value="false" id='haveEnexLevelResources'> 
+            <input type="checkbox" value="false" id='haveEnexLevelResources'>
             <label for="haveEnexLevelResources" class="pure-checkbox">
-              Store attachments in notebook-level
+              Store attachments in one folder only
               <br><div style='font-size: 12px;'><i>(
-                Store note resources on global _resources folder for each enex export)</i></div>
+                Stores note resources on global _resources folder per enex export if enabled.)</i></div>
             </label>
           </div>
-          <div class="field half">
-            <input type="checkbox" value="false" id='haveGlobalResources'> 
-            <label for="haveGlobalResources" class="pure-checkbox">
-              Store attachments in one folder only 
-              <br><div style='font-size: 12px;'><i>(
-                Stores note resources on global _resources folder)</i></div>
-            </label>
-          </div>
-          <div class="field half">
-            <label for="keepImageSize" class="pure-checkbox">
+
+            <div class="field half">
+              <input type="checkbox" value="false" id='rootNameOnly'>
+              <label for="rootNameOnly" class="pure-checkbox">
+                Remove the relative path from the attachment name
+                <br>
+              </label>
+            </div>
+
+            <div class="field half">
+              <input type="checkbox" value="false" id='downloadImages'>
+              <label for="downloadImages" class="pure-checkbox">
+                Download img tags to local files
+                <br>
+              </label>
+            </div>
+
+
+            <div class="field half">
+              <label for="keepImageSize" class="pure-checkbox">
               Keep Image size
-              
+
             </label>
               <select name="keepImageSize" id="keepImageSize">
                 <option value="ObsidianMD">Yes</option>
@@ -109,7 +112,7 @@
         </div>
 
         <div class="field half">
-          <input type="checkbox" value="false" id='urlEncodeFileNamesAndLinks'> 
+          <input type="checkbox" value="false" id='urlEncodeFileNamesAndLinks'>
           <label for="urlEncodeFileNamesAndLinks" class="pure-checkbox">
             Perform URL Encoding on FileNames And Links
             <br><div style='font-size: 12px;'><i>(
@@ -117,24 +120,9 @@
           </label>
         </div>
 
-        <div class="field half">
-          <input type="checkbox" value="false" id='sanitizeResourceNameSpaces'> 
-          <label for="sanitizeResourceNameSpaces" class="pure-checkbox">
-            Sanitize spaces in resource names
-            <br>
-          </label>
-        </div>
 
         <div class="field half">
-          <label for="replacementChar" class="pure-checkbox">
-            Replacement character for sanitizing spaces in resource names
-          </label>
-          <input type="text" value="_" id='replacementChar'> 
-          
-        </div>
-        <br><br>
-        <div class="field half">
-          <input type="checkbox" value="false" id='keepOriginalAmountOfNewlines'> 
+          <input type="checkbox" value="false" id='keepOriginalAmountOfNewlines'>
           <label for="keepOriginalAmountOfNewlines" class="pure-checkbox">
             Keep original amount of newlines
             <br><div style='font-size: 12px;'><i>(
@@ -142,7 +130,7 @@
           </label>
       </div>
       <div class="field half">
-        <input type="checkbox" value="false" id='generateNakedUrls'> 
+        <input type="checkbox" value="false" id='generateNakedUrls'>
         <label for="generateNakedUrls" class="pure-checkbox">
           Generate 'naked' URLs
           <br><div style='font-size: 12px;'><i>(
@@ -150,9 +138,9 @@
             )</i></div>
         </label>
     </div>
-      
+
       <div class="field half">
-        <input type="checkbox" value="false" id='addExtensionToInternalLinks'> 
+        <input type="checkbox" value="false" id='addExtensionToInternalLinks'>
         <label for="addExtensionToInternalLinks" class="pure-checkbox">
           Add 'md' extension of internal links
           <br><div style='font-size: 12px;'><i>(
@@ -160,7 +148,7 @@
         </label>
       </div>
       <div class="field half">
-        <input type="checkbox" value="false" id='plainTextNotesOnly'> 
+        <input type="checkbox" value="false" id='plainTextNotesOnly'>
         <label for="plainTextNotesOnly" class="pure-checkbox">
           Convert plain text notes only
           <br><div style='font-size: 12px;'><i>(
@@ -168,11 +156,11 @@
         </label>
     </div>
 
-          <div class="field"> 
+          <div class="field">
               <input type="checkbox" value="false" id='skipEnexFileNameFromOutputPath'>
               <label for="skipEnexFileNameFromOutputPath" class="pure-checkbox">
                 Skip enex filename from output path
-              </label> 
+              </label>
           </div>
 
           <div class="field">
@@ -181,7 +169,7 @@
             <input type="text" name="resourcesDir" id="resourcesDir" value="_resources">
           </div>
       </section>
-      
+
       <section style="display: block;width: 20%;">
       </section>
           </div>
@@ -196,10 +184,10 @@
                   <br><div style='font-size: 12px;'><i>(
                     if it's true then all deepest elements with monospace font style is recognized as Codeblocks.)</i></div>
                 </label>
-                
+
               </div>
               <div class="field">
-                <input type="checkbox" value="false" id='keepMDCharactersOfENNotes'> 
+                <input type="checkbox" value="false" id='keepMDCharactersOfENNotes'>
                 <label for="keepMDCharactersOfENNotes" class="pure-checkbox">
                   Keep Markdown characters Of EN Notes
                   <br><div style='font-size: 12px;'><i>(
@@ -216,16 +204,16 @@
               <h2>Tags</h2>
 
                 <div class="field">
-                  <input type="checkbox" value="false" id='useHashTags'> 
+                  <input type="checkbox" value="false" id='useHashTags'>
                   <label for="useHashTags" class="pure-checkbox">
                     Add # to tag
                     <br><div style='font-size: 12px;'><i>(
                       Appends the pound sign at the beginning of the tags.)</i></div>
                   </label>
                 </div>
-              
+
                 <div class="field">
-                  <input type="checkbox" value="false" id='nestedTags'> 
+                  <input type="checkbox" value="false" id='nestedTags'>
                   <label for="nestedTags" class="pure-checkbox">
                     Generate nested tags
                     <br><div style='font-size: 12px;'><i>(
@@ -244,20 +232,20 @@
                   <input type="text" id='nestedTags.replaceSeparatorWith' name='nestedTags.replaceSeparatorWith' size="10"/>
                 </div>
                 <div class="field half">
-  
+
                   <label for="nestedTags.replaceSpaceWith" class="pure-input-1-2">Replace space with
                     </label>
-  
+
                   <input type="text" id='nestedTags.replaceSpaceWith' width="20px">
                 </div>
             </section>
             <section></section>
             </div>
-      
+
       </div>
     </div>
     </section>
-    
+
   </section>
   </template>
   

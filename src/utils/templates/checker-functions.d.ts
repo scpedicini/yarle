@@ -1,0 +1,9 @@
+export declare const hasCreationTimeInTemplate: (templateContent: string) => boolean;
+export declare const hasLocationInTemplate: (templateContent: string) => boolean;
+export declare const hasNotebookInTemplate: (templateContent: string) => boolean;
+export declare const hasOriginalLinkInTemplate: (templateContent: string) => boolean;
+export declare const hasSourceURLInTemplate: (templateContent: string) => boolean;
+export declare const hasTagsInTemplate: (templateContent: string) => boolean;
+export declare const hasMetadataInTemplate: (templateContent: string) => boolean;
+export declare const hasUpdateTimeInTemplate: (templateContent: string) => boolean;
+export declare const hasLinkToOriginalInTemplate: (templateContent: string) => boolean;

@@ -1,4 +1,4 @@
-
+/* tslint:disable:no-console */
 import * as fs from 'fs';
 import url from 'url';
 import path from 'path';
@@ -51,6 +51,9 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
+
+  // show developer console on mainWindow
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {

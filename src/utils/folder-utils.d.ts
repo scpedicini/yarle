@@ -1,0 +1,12 @@
+import { Path } from '../paths';
+export declare const paths: Path;
+export declare const getResourceDir: (dstPath: string, note: any) => string;
+export declare const getMdFilePath: (note: any) => string;
+export declare const getHtmlFilePath: (note: any) => string;
+export declare const getHtmlFileLink: (note: any) => string;
+export declare const getRelativeResourceDir: (note: any) => string;
+export declare const getAbsoluteResourceDir: (note: any) => string;
+export declare const clearResourceDir: (note: any) => void;
+export declare const clearResourceDistDir: () => void;
+export declare const clearMdNotesDistDir: () => void;
+export declare const setPaths: (enexSource: string) => void;

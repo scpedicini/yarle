@@ -3,25 +3,34 @@ import fs from 'fs';
 import { merge } from 'lodash';
 import * as path from 'path';
 import flow from 'xml-flow';
+import axios from 'axios';
+import * as stream from 'stream';
+
 
 import * as utils from './utils';
 import { YarleOptions } from './YarleOptions';
 import { processNode } from './process-node';
 import { isWebClip } from './utils/note-utils';
 import { loggerInfo } from './utils/loggerInfo';
-import { hasCreationTimeInTemplate,
+import { SymmetricHash } from './utils/symmetric-hash';
+
+import {
+  hasCreationTimeInTemplate,
   hasLinkToOriginalInTemplate,
   hasLocationInTemplate,
   hasNotebookInTemplate,
   hasSourceURLInTemplate,
   hasTagsInTemplate,
-  hasUpdateTimeInTemplate } from './utils/templates/checker-functions';
+  hasUpdateTimeInTemplate
+} from './utils/templates/checker-functions';
 import { defaultTemplate } from './utils/templates/default-template';
 import { OutputFormat } from './output-format';
 import { clearLogFile } from './utils/clearLogFile';
-import { RuntimePropertiesSingleton } from './runtime-properties';
+import { promisify } from 'util';
+import * as https from 'https';
 
 export const defaultYarleOptions: YarleOptions = {
+  downloadImages: true,
   enexSources: ['notebook.enex'],
   outputDir: './mdNotes',
   keepOriginalHtml: false,
@@ -38,8 +47,6 @@ export const defaultYarleOptions: YarleOptions = {
   },
   outputFormat: OutputFormat.StandardMD,
   urlEncodeFileNamesAndLinks: false,
-  sanitizeResourceNameSpaces: false,
-  replacementChar: '_',
   pathSeparator: '/',
   resourcesDir: '_resources',
   turndownOptions: {
@@ -47,12 +54,17 @@ export const defaultYarleOptions: YarleOptions = {
   },
 };
 
-export let yarleOptions: YarleOptions = { ...defaultYarleOptions };
+export const yarleGlobalData = {
+  pendingImages: new SymmetricHash()
+};
+
+export let yarleOptions: YarleOptions = {...defaultYarleOptions};
 
 const setOptions = (options: YarleOptions): void => {
   yarleOptions = merge({}, defaultYarleOptions, options);
+  yarleGlobalData.pendingImages = new SymmetricHash();
 
-  let template = (yarleOptions.templateFile)  ?  fs.readFileSync(yarleOptions.templateFile, 'utf-8') : defaultTemplate;
+  let template = (yarleOptions.templateFile) ? fs.readFileSync(yarleOptions.templateFile, 'utf-8') : defaultTemplate;
   template = yarleOptions.currentTemplate ? yarleOptions.currentTemplate : template;
 
   /*if (yarleOptions.templateFile) {*/
@@ -91,7 +103,7 @@ export const parseStream = async (options: YarleOptions, enexSource: string): Pr
       return reject();
     };
     if (!fs.existsSync(enexSource)) {
-      return loggerInfo(JSON.stringify({ name: 'NoSuchFileOrDirectory', message: 'source Enex file does not exists' }));
+      return loggerInfo(JSON.stringify({name: 'NoSuchFileOrDirectory', message: 'source Enex file does not exists'}));
     }
 
     const xml = flow(stream);
@@ -110,7 +122,6 @@ export const parseStream = async (options: YarleOptions, enexSource: string): Pr
           // make sure single attributes are not collapsed
           note['note-attributes'] = noteAttributes;
         }
-
         processNode(note, notebookName);
         ++noteNumber;
         loggerInfo(`Notes processed: ${noteNumber}\n\n`);
@@ -133,19 +144,47 @@ export const parseStream = async (options: YarleOptions, enexSource: string): Pr
   });
 };
 
-export const dropTheRope = async (options: YarleOptions): Promise<Array<string>> => {
+const finished = promisify(stream.finished);
+
+export async function downloadFile(fileUrl: string, outputLocationPath: string): Promise<any> {
+  const writer = fs.createWriteStream(outputLocationPath);
+  const agent = new https.Agent({
+    rejectUnauthorized: false
+  });
+
+  const response = await axios({
+    method: 'get',
+    url: fileUrl,
+    responseType: 'stream',
+    httpsAgent: agent,
+    timeout: 1000 * 30,
+  })
+  response.data.pipe(writer);
+
+  return finished(writer);
+}
+
+export const dropTheRope = async (options: YarleOptions): Promise<void> => {
   clearLogFile();
   setOptions(options);
-  const outputNotebookFolders = [];
+
   for (const enex of options.enexSources) {
     utils.setPaths(enex);
-    const runtimeProps = RuntimePropertiesSingleton.getInstance();
-    runtimeProps.setCurrentNotebookName(utils.getNotebookName(enex));
     await parseStream(options, enex);
-    outputNotebookFolders.push(utils.getNotesPath());
   }
 
-  return outputNotebookFolders;
+  loggerInfo(`Downloading ${yarleGlobalData.pendingImages.length} remaining images...`);
+
+  for await(let [url, fileName] of yarleGlobalData.pendingImages.getAsEntries()) {
+    loggerInfo(`Downloading ${url} to ${fileName}`);
+    try {
+      await downloadFile(url, fileName);
+    } catch (error) {
+      loggerInfo(`Could not download ${url}:\n${error.message}`);
+    }
+  }
+
+  loggerInfo(`Finished downloading images`);
 
 };
 // tslint:enable:no-console

@@ -9,14 +9,48 @@ import { yarleOptions } from '../yarle';
 import { ResourceFileProperties } from './../models/ResourceFileProperties';
 import { OutputFormat } from './../output-format';
 import { getCreationTime } from './content-utils';
+import { v4 } from 'uuid';
+
+
+const FILENAME_DELIMITER = '_';
 
 export const normalizeTitle = (title: string) => {
-  // Allow setting a specific replacement character for file and resource names
-  // Default to a retrocompatible value
-  return sanitize(title, {replacement: yarleOptions.replacementChar || '_'});
+  return sanitize(title, {replacement: FILENAME_DELIMITER});
 };
 
+export const checkFileExists = (filePath: string): boolean => {
+  return fs.existsSync(filePath);
+};
+
+export const checkPathFileExists = (filePath: string, fileName: string) => {
+  return fs.existsSync(path.join(filePath, fileName));
+};
+
+
+export const getFileExtension = (url: string): string => {
+  const extension = url.split('.').pop();
+
+  return extension ? `.${extension}` : '';
+}
+
+export const getFileNameAndExtension = (url: string): [rootName: string, ext: string] => {
+  let rootName = url.split('/').pop(); // image.jpg
+  let ext = rootName.split('.').pop();
+
+  if(ext && ext.length > 0)
+    rootName = rootName.substring(0, rootName.length - ext.length - 1);
+
+  rootName = normalizeTitle(rootName);
+  ext = normalizeTitle(ext);
+
+  return [rootName, ext];
+}
+
+
+
+
 export const getFileIndex = (dstPath: string, fileNamePrefix: string): number | string => {
+
   const index = fs
     .readdirSync(dstPath)
     .filter(file => {
@@ -32,21 +66,19 @@ export const getFileIndex = (dstPath: string, fileNamePrefix: string): number | 
 
 };
 export const getResourceFileProperties = (workDir: string, resource: any): ResourceFileProperties => {
-  const UNKNOWNFILENAME = 'unknown_filename';
+  // const UNKNOWNFILENAME = 'unknown_filename';
+  const UNKNOWNFILENAME = v4();
 
   const extension = getExtension(resource);
   let fileName = UNKNOWNFILENAME;
 
   if (resource['resource-attributes'] && resource['resource-attributes']['file-name']) {
     const fileNamePrefix = resource['resource-attributes']['file-name'].substr(0, 50);
+
     fileName = fileNamePrefix.split('.')[0];
+
   }
   fileName = fileName.replace(/[/\\?%*:|"<>]/g, '-');
-
-  if (yarleOptions.sanitizeResourceNameSpaces) {
-    fileName = fileName.replace(/ /g, yarleOptions.replacementChar);
-  }
-
   const index = getFileIndex(workDir, fileName);
   const fileNameWithIndex = index > 0 ? `${fileName}.${index}` : fileName;
 
@@ -95,6 +127,7 @@ export const getZettelKastelId = (note: any, dstPath: string): string => {
 };
 
 export const getNoteName = (dstPath: string, note: any): string => {
+
   let noteName;
 
   if (yarleOptions.isZettelkastenNeeded) {

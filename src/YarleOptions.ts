@@ -23,17 +23,11 @@ export interface YarleOptions {
     logseqSettings?: {
         journalNotes: boolean,
     };
-    obsidianSettings?: {
-        omitLinkDisplayName?: boolean,
-    };
     replaceWhitespacesInTagsByUnderscore?: boolean;
     skipEnexFileNameFromOutputPath?: boolean;
     haveEnexLevelResources?: boolean;
-    haveGlobalResources?: boolean;
     keepMDCharactersOfENNotes?: boolean;
     urlEncodeFileNamesAndLinks?: boolean;
-    sanitizeResourceNameSpaces?: boolean;
-    replacementChar?: string;
     monospaceIsCodeBlock?: boolean;
     dateFormat?: string;
     nestedTags?: TagSeparatorReplaceOptions;
@@ -44,4 +38,6 @@ export interface YarleOptions {
     pathSeparator?: string;
     resourcesDir?: string;
     turndownOptions?: Record<string, any>;
+    rootNameOnly?: boolean;
+    downloadImages?: boolean;
 }

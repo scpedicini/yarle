@@ -1,0 +1,13 @@
+import { MetaData } from './../models/MetaData';
+import { NoteData } from './../models';
+export declare const getMetadata: (note: any, notebookName: string) => MetaData;
+export declare const getTitle: (note: any) => string;
+export declare const getCreationTime: (note: any) => string;
+export declare const getUpdateTime: (note: any) => string;
+export declare const getSourceUrl: (note: any) => string;
+export declare const getLinkToOriginal: (note: any) => string;
+export declare const getLatLong: (note: any) => string;
+export declare const getTags: (note: any) => NoteData;
+export declare const logTags: (note: any) => string;
+export declare const setFileDates: (path: string, note: any) => void;
+export declare const getTimeStampMoment: (resource: any) => any;

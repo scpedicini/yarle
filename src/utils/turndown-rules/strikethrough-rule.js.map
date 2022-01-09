@@ -1,0 +1,1 @@
+{"version":3,"file":"strikethrough-rule.js","sourceRoot":"","sources":["strikethrough-rule.ts"],"names":[],"mappings":";;;AAAA,kEAAkE;AAClE,4EAA4E;AAC/D,QAAA,iBAAiB,GAAG;IAC/B,MAAM,EAAE,CAAC,KAAK,EAAE,GAAG,EAAE,QAAQ,CAAC;IAC9B,WAAW,EAAE,CAAC,OAAY,EAAE,EAAE;QAC5B,OAAO,KAAK,OAAO,IAAI,CAAC;IAC1B,CAAC;CACF,CAAC"}
